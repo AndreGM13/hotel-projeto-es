@@ -13,19 +13,27 @@ public class Apartamento {
     public Hospede getHospede() { return hospede; }
 
     public void reservar(Hospede h) {
-        throw new UnsupportedOperationException("Implementar: LIVRE -> RESERVADO");
+        status = Status.RESERVADO;
+        hospede = h;
+
     }
 
     public void checkin(Hospede h) {
-        throw new UnsupportedOperationException("Implementar: LIVRE/RESERVADO -> OCUPADO");
+        status = Status.OCUPADO;
+        hospede = h;
+
     }
 
     public void checkout() {
-        throw new UnsupportedOperationException("Implementar: OCUPADO -> LIVRE");
+        status = Status.LIVRE;
+        hospede = null;
+
     }
 
     public void cancelarReserva() {
-        throw new UnsupportedOperationException("Implementar: RESERVADO -> LIVRE");
+        status = Status.LIVRE;
+        hospede = null;
+
     }
 
     public boolean estaLivre() { return status == Status.LIVRE; }
