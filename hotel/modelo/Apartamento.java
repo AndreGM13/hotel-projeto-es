@@ -12,28 +12,80 @@ public class Apartamento {
     public Status getStatus() { return status; }
     public Hospede getHospede() { return hospede; }
 
+    /*
+     * Reserva o apartamento para um determinado hospede
+     *
+     * @param hospede (Dados do hóspede que realizara a reserva)
+     * @throws IllegalArgumentException se o hospede for nulo
+     * @throws IllegalStateException se o apartamento não estiver LIVRE
+     * @pre O apartamento deve estar com status LIVRE
+     * @post O status do apartamento passa a ser RESERVADO e os dados do hóspede são salvos
+     */
     public void reservar(Hospede h) {
+        if(h == null)   {
+            throw new IllegalArgumentException("Erro nos dados do hospede");
+        }    
+        if(!estaLivre()){
+            throw new IllegalStateException("Apartamento não disponível");
+        }
+                
         status = Status.RESERVADO;
-        hospede = h;
+        hospede = h;  
 
     }
 
+    /*
+     * Realiza o check-in no apartamento
+     *
+     * @param hospede Dados do hospede que ira se hospedar
+     * @throws IllegalArgumentException se o hospede for null
+     * @throws IllegalStateException se o apartamento já estiver OCUPADO
+     * @pre O apartamento deve estar RESERVADO
+     * @post O status do apartamento passa a ser OCUPADO e os dados do hospede são sobrescritos
+     */
     public void checkin(Hospede h) {
+        if(h == null){
+            throw new IllegalArgumentException("Erro nos dados do hospede");
+        }   
+        if(!estaReservado()){
+                throw new IllegalStateException("Apartamento não reservado");
+        }   
+             
         status = Status.OCUPADO;
-        hospede = h;
-
+        hospede = h;   
+                
     }
 
+    /*
+     * Realiza o check-out do apartamento
+     *
+     * @throws IllegalStateException Se o apartamento não estiver OCUPADO
+     * @pre O apartamento deve estar com status OCUPADO
+     * @post O status do apartamento passa a ser LIVRE e os dados do hospede são apagados
+     */
     public void checkout() {
+        if(!estaOcupado()){
+            throw new IllegalStateException("Apartamento não ocupado");  
+        }
+            
         status = Status.LIVRE;
-        hospede = null;
-
+        hospede = null; 
     }
 
-    public void cancelarReserva() {
+    /*
+     * Cancela a reserva atual do apartamento
+     *
+     * @throws IllegalStateException Se o apartamento não estiver RESERVADO
+     * @pre O apartamento deve estar com status RESERVADO
+     * @post O status do apartamento passa a ser LIVRE e os dados do hospede sao apagados
+     */
+    public void cancelarReserva(){
+        if(!estaReservado()){
+             throw new IllegalStateException("Apartamento não reservado");   
+        }
+            
         status = Status.LIVRE;
         hospede = null;
-
     }
 
     public boolean estaLivre() { return status == Status.LIVRE; }
