@@ -130,7 +130,46 @@ public class HotelTest {
             passou++;
         }
     }
+    
+    static void testarMostrarMapa(){
+        total++;
+        try {
+            Hotel hotel = new Hotel();
+            hotel.mostrarMapa();
+            passou++;
+        } catch (Exception e) {
+            System.out.println("Falha: testarMostrarMapa");
+            System.out.println(e);
+        }
+        
+    }
 
+    static void testarConsultarApartamento(){
+        total++;
+        Hotel hotel = new Hotel();
+        Hospede hospede =  new Hospede("123", "Ítalo", "puc", "123", "italo@pucsp.edu.br");
+        try {
+            hotel.reservarApartamento(1, 4, hospede);
+            hotel.consultarApartamento(1, 4);
+            passou++;
+        } catch (Exception e) {
+            System.out.println("Falha: testarConsultarApartamento");
+            System.out.println(e);
+        }
+    }
+
+    static void testarConsultarApartamentoFalha(){
+        total++;
+        Hotel hotel = new Hotel();
+        try {
+            hotel.consultarApartamento(-1, -1); // apto inexistente
+            System.out.println("Falha: testarConsultarApartamentoFalha");
+        } catch (Exception e) {
+            passou++;
+        }
+    }
+
+    
     public static void main(String[] args) {
         testarReservarAptoLivre();
         testarReservarAptoOcupadoFalha();
