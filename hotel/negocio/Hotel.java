@@ -114,23 +114,89 @@ public class Hotel {
         return true;
     }   
 
+    /*
+    * Exibe no o mapa visual de ocupação do hotel (20 andares x 14 quartos)
+    * @pre O hotel deve estar inicializado
+    */
+
     public void mostrarMapa() {
-        throw new UnsupportedOperationException("Implementar mostrarMapa");
+        int i, j;
+        System.out.println("\t\t\tMapa de ocupação\n");
+        System.out.printf("quarto->\t");
+        for(i=0; i<14; i++)
+            System.out.printf("%2d ",i);
+        System.out.println();
+        for(i=19; i>=0; i--){
+            for(j=0; j<14; j++){
+                if(j==0)
+                    System.out.printf("Andar %2d\t",i);
+                System.out.printf(" %c ", matriz[i][j].getSymbol());
+            }
+            System.out.println();
+        }
+        System.out.println("\n\t\t\t Legenda");
+        System.out.println("Quarto livre: '.'   Quarto reservado:'R'   Quarto ocupado:'O'");
     }
+
+    /*
+    * Consulta o status de um apartamento especifico e exibe os dados do hospede, caso não esteja LIVRE
+    *
+    * @param andar (deve estar entre 0 e 19)
+    * @param numero do apartamento (deve estar entre 0 e 13)
+    * @throws IllegalArgumentException Se as coordenadas do andar ou numero forem invalidas
+    * @pre os dados do hospede devem estar cadastrados caso nao esteja LIVRE
+    * @post Exibe o status atual do apartamento e os dados do hospede se houver
+    */
 
     public void consultarApartamento(int andar, int numero) {
         if (!aptoValido(andar, numero)) {
             throw new IllegalArgumentException("Andar ou numero invalido");
         }
-        throw new UnsupportedOperationException("Implementar consultarApartamento");
+
+        if(!matriz[andar][numero].estaLivre()) {
+            Hospede h = matriz[andar][numero].getHospede();
+            if(matriz[andar][numero].estaOcupado())
+                System.out.println("Status: Ocupado");
+            else
+                System.out.println("Status: Reservado");
+
+            if(h != null)
+                System.out.println(h.toString());    
+        }else
+            System.out.println("Status: Livre");
+        
     }
 
+    /*
+    * Calcula a taxa de ocupação do hotel
+    *
+    * @return taxa de ocupação como um valor decimal entre 0.0(nenhum quarto ocupado) e 1.0(todos os quartos reservados)
+    */
     public float calcularTaxaOcupacao() {
-        throw new UnsupportedOperationException("Implementar calcularTaxaOcupacao");
+        int i,j,contador=0;
+        float taxa;
+        for(i=0; i<=19; i++)
+            for(j=0; j<14; j++)
+                if(matriz[i][j].estaOcupado())
+                    contador++;
+        taxa = (float) contador/280;
+        return taxa;
     }
 
+    /*
+    * Calcula a taxa de reservas do hotel
+    *
+    * @return A taxa de reservas como um valor decimal entre 0.0(nenhum quarto reservado) e 1.0(todos os quartos reservados)
+    */
     public float calcularTaxaReservas() {
-        throw new UnsupportedOperationException("Implementar calcularTaxaReservas");
+        int i,j,contador=0;
+        float taxa;
+        for(i=0; i<=19; i++)
+            for(j=0; j<14; j++)
+                if(matriz[i][j].estaReservado())
+                    contador++;
+        taxa = (float) contador/280;
+        return taxa;
     }
 
     public void cadastrarServico(String nome, float preco) {
