@@ -226,9 +226,13 @@ public class HotelTest {
         testarCheckOut();
         testarCheckOutFalha();
         testarMostrarMapa();
+        System.out.println();
         testarConsultarApartamentoOcupado();
+        System.out.println();
         testarConsultarApartamentoLivre();
+        System.out.println();
         testarConsultarApartamentoReservado();
+        System.out.println();
         testarCalcularTaxaOcupacao();
         testarCalcularTaxaReservas();
 
