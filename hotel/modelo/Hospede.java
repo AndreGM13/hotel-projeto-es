@@ -23,6 +23,6 @@ public class Hospede {
 
     @Override
     public String toString() {
-        return nome + " (CPF: " + cpf + ")";
+        return "Nome:" + nome +  "\nCPF: " + cpf +  "\nEndereço: " + endereco +  "\nCelular: " + celular +  "\nEmail: " + email;
     }
 }

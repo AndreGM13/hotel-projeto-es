@@ -20,8 +20,11 @@ public class Hotel {
 
     private void inicializar() {
         for (int a = 0; a < NUM_ANDARES; a++) {
-            for (int n = 0; n < APTOS_POR_ANDAR; n++) {
-                matriz[a][n] = new Apartamento();
+            for (int n = 0; n < APTOS_POR_ANDAR; n++) { 
+                if(n<6)
+                    matriz[a][n] = new ApartamentoPremium();
+                else
+                    matriz[a][n] = new ApartamentoSimples();
             }
         }
     }
