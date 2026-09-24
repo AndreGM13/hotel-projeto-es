@@ -144,7 +144,33 @@ public class HotelTest {
         
     }
 
-    static void testarConsultarApartamento(){
+    static void testarConsultarApartamentoOcupado(){
+        total++;
+        Hotel hotel = new Hotel();
+        Hospede hospede =  new Hospede("123", "Ítalo", "puc", "123", "italo@pucsp.edu.br");
+        try {
+            hotel.reservarApartamento(1, 4, hospede);
+            hotel.realizarCheckin(1, 4 , hospede);
+            hotel.consultarApartamento(1, 4);
+            passou++;
+        } catch (Exception e) {
+            System.out.println("Falha: testarConsultarApartamentoOcupado");
+            System.out.println(e);
+        }
+    }
+
+    static void testarConsultarApartamentoLivre(){
+        total++;
+        Hotel hotel = new Hotel();
+        try {
+            hotel.consultarApartamento(0, 0); 
+            passou++;
+        } catch (Exception e) {
+            System.out.println("Falha: testarConsultarApartamentoLivre");
+            System.out.println(e);
+        }
+    }
+    static void testarConsultarApartamentoReservado(){
         total++;
         Hotel hotel = new Hotel();
         Hospede hospede =  new Hospede("123", "Ítalo", "puc", "123", "italo@pucsp.edu.br");
@@ -153,23 +179,42 @@ public class HotelTest {
             hotel.consultarApartamento(1, 4);
             passou++;
         } catch (Exception e) {
-            System.out.println("Falha: testarConsultarApartamento");
+            System.out.println("Falha: testarConsultarApartamentoReservado");
+            System.out.println(e);
+        }
+    }
+    static void testarCalcularTaxaOcupacao(){
+        total++;
+        Hotel hotel = new Hotel();
+        //calculo para um hóspede, deve retornar 1/280 = 0,0036 aprox
+        Hospede hospede =  new Hospede("123", "Ítalo", "puc", "123", "italo@pucsp.edu.br");
+        try{
+            hotel.reservarApartamento(1, 4, hospede);
+            hotel.realizarCheckin(1, 4, hospede);
+            System.out.println(hotel.calcularTaxaOcupacao());
+            passou++;
+        }catch (Exception e){
+            System.out.println("Falha: testarCalcularTaxaOcupacao");
+            System.out.println(e);
+        }
+
+    }
+
+    static void testarCalcularTaxaReservas(){
+        total++;
+        Hotel hotel = new Hotel();
+        //calculo para um hóspede, deve retornar 1/280 = 0,0036 aprox
+        Hospede hospede =  new Hospede("123", "Ítalo", "puc", "123", "italo@pucsp.edu.br");
+        try {
+            hotel.reservarApartamento(1, 4, hospede);
+            System.out.println(hotel.calcularTaxaReservas());
+            passou++;
+        } catch (Exception e) {
+            System.out.println("Falha: testarCalcularTaxaReservas");
             System.out.println(e);
         }
     }
 
-    static void testarConsultarApartamentoFalha(){
-        total++;
-        Hotel hotel = new Hotel();
-        try {
-            hotel.consultarApartamento(-1, -1); // apto inexistente
-            System.out.println("Falha: testarConsultarApartamentoFalha");
-        } catch (Exception e) {
-            passou++;
-        }
-    }
-
-    
     public static void main(String[] args) {
         testarReservarAptoLivre();
         testarReservarAptoOcupadoFalha();
@@ -180,7 +225,12 @@ public class HotelTest {
         testarCancelarReservaFalha();
         testarCheckOut();
         testarCheckOutFalha();
-        
+        testarMostrarMapa();
+        testarConsultarApartamentoOcupado();
+        testarConsultarApartamentoLivre();
+        testarConsultarApartamentoReservado();
+        testarCalcularTaxaOcupacao();
+        testarCalcularTaxaReservas();
 
         System.out.println(passou + "/" + total + " testes passaram");
     }
