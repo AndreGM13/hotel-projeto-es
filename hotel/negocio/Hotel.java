@@ -236,6 +236,10 @@ public class Hotel {
     public boolean registrarConsumo(int andar, int numero, int indiceServico, int quantidade) {
         if (!aptoValido(andar, numero)) {
             throw new IllegalArgumentException("Andar ou numero invalido");
+        }else if (indiceServico < 0 || indiceServico >= servicos.size()) {
+            throw new IllegalArgumentException("Índice de serviço inválido");
+        }else if (quantidade <= 0) {
+            throw new IllegalArgumentException("Quantidade deve ser positiva");
         }else if(!(getApartamento(andar, numero).estaOcupado())){
             System.out.println("O apartamento não está ocupado por nenhum Hóspede");
             return false;
@@ -244,22 +248,15 @@ public class Hotel {
             consumos.add(consumo);
             return true;
         }
-        if (indiceServico < 0 || indiceServico >= servicos.size()) {
-            throw new IllegalArgumentException("Índice de serviço inválido");
-        }
-        if (quantidade <= 0) {
-            throw new IllegalArgumentException("Quantidade deve ser positiva");
-        }
-
-        Apartamento apartamento = matriz[andar][numero];
-        if (!apartamento.estaOcupado()) {
-            return false;
-        }
-
-        consumos.add(new Consumo(apartamento, servicos.get(indiceServico), quantidade));
-        return true;
     }
-
+    /**
+     * Retorna uma lista contendo todos os consumos registrados para um determinado apartamento.
+     * 
+     * @param andar o andar onde se localiza o apartamento
+     * @param numero o número do apartamento
+     * @return um {@link ArrayList} de {@link Consumo} com os consumos associados ao apartamento especificado
+     * @throws IllegalArgumentException se o andar ou o número do apartamento forem inválidos
+     */
     public ArrayList<Consumo> getConsumosDoApartamento(int andar, int numero) {
         if (!aptoValido(andar, numero)) {
             throw new IllegalArgumentException("Andar ou numero invalido");
@@ -268,13 +265,23 @@ public class Hotel {
         Apartamento apartamento = matriz[andar][numero];
         ArrayList<Consumo> resultado = new ArrayList<>();
         for (Consumo consumo : consumos) {
-            if (consumo.getApartamento() == apartamento) {
+            if (consumo.getApartamento().equals(apartamento)) {
                 resultado.add(consumo);
             }
         }
         return resultado;
     }
 
+    /**
+     * Emite a fatura detalhada da estadia e dos consumos para um determinado apartamento.
+     * 
+     * @param andar o andar onde se localiza o apartamento
+     * @param numero o número do apartamento
+     * @param dias a quantidade de dias de hospedagem (deve ser estritamente maior que zero)
+     * @return um objeto {@link Fatura} contendo o resumo financeiro da estadia e consumos
+     * @throws IllegalArgumentException se o andar/número forem inválidos ou se a quantidade de dias for menor ou igual a zero
+     * @throws IllegalStateException se o apartamento não estiver ocupado por nenhum hóspede
+     */
     public Fatura emitirFatura(int andar, int numero, int dias) {
         if (!aptoValido(andar, numero)) {
             throw new IllegalArgumentException("Andar ou numero invalido");
