@@ -33,7 +33,7 @@ public class Hotel {
         return andar >= 0 && andar < NUM_ANDARES && numero >= 0 && numero < APTOS_POR_ANDAR;
     }
 
-    /*
+    /**
      * Reserva um apartamento, mudando seu status de LIVRE para RESERVADO.
      *
      * @param andar(0 - 19)
@@ -55,7 +55,7 @@ public class Hotel {
     }
 
 
-    /*
+    /**
      * Realiza o check-in de um apartamento, mudando seu status de RESERVADO para OCUPADO
      *
      * @param andar(0 - 19)
@@ -76,7 +76,7 @@ public class Hotel {
         
     }
 
-    /*
+    /**
      * Realiza o check-out de um apartamento, mudando seu status de OCUPADO para LIVRE
      *
      * @param andar(0 - 19)
@@ -97,7 +97,7 @@ public class Hotel {
     
     }
 
-    /*
+    /**
      * Cancela uma reserva, mudando seu status de RESERVADO para LIVRE
      *
      * @param andar(0 - 19)
@@ -117,7 +117,7 @@ public class Hotel {
         return true;
     }   
 
-    /*
+    /**
     * Exibe no o mapa visual de ocupação do hotel (20 andares x 14 quartos)
     * @pre O hotel deve estar inicializado
     */
@@ -141,7 +141,7 @@ public class Hotel {
         System.out.println("Quarto livre: '.'   Quarto reservado:'R'   Quarto ocupado:'O'");
     }
 
-    /*
+    /**
     * Consulta o status de um apartamento especifico e exibe os dados do hospede, caso não esteja LIVRE
     *
     * @param andar (deve estar entre 0 e 19)
@@ -171,7 +171,7 @@ public class Hotel {
         
     }
 
-    /*
+    /**
     * Calcula a taxa de ocupação do hotel
     *
     * @return taxa de ocupação como um valor decimal entre 0.0(nenhum quarto ocupado) e 1.0(todos os quartos reservados)
@@ -187,7 +187,7 @@ public class Hotel {
         return taxa;
     }
 
-    /*
+    /**
     * Calcula a taxa de reservas do hotel
     *
     * @return A taxa de reservas como um valor decimal entre 0.0(nenhum quarto reservado) e 1.0(todos os quartos reservados)
@@ -203,6 +203,14 @@ public class Hotel {
         return taxa;
     }
 
+    /**
+     * Cadastra um novo serviço no sistema.
+     * 
+     * @param nome o nome do serviço a ser cadastrado (não pode ser uma string vazia)
+     * @param preco o preço do serviço (deve ser estritamente maior que zero)
+     * @throws IllegalArgumentException se o preço for menor ou igual a zero 
+     *                                  ou se o nome for uma string vazia ("")
+     */
     public void cadastrarServico(String nome, float preco) {
         if (nome == null || nome.trim().isEmpty()) {
             throw new IllegalArgumentException("Nome do serviço não pode ser vazio");
@@ -213,10 +221,28 @@ public class Hotel {
 
         servicos.add(new Servico(nome.trim(), preco));
     }
-
+    
+    /**
+     * Registra o consumo de um serviço por um hóspede em um determinado apartamento.
+     * 
+     * @param andar o andar onde se localiza o apartamento
+     * @param numero o número do apartamento
+     * @param indiceServico o índice do serviço correspondente na lista de serviços
+     * @param quantidade a quantidade consumida do serviço
+     * @throws IllegalArgumentException quando o apartamento for invalido
+     * @return {@code true} se o consumo foi registrado com sucesso; 
+     *         {@code false} se o apartamento for inválido ou não estiver ocupado por nenhum hóspede
+     */
     public boolean registrarConsumo(int andar, int numero, int indiceServico, int quantidade) {
         if (!aptoValido(andar, numero)) {
             throw new IllegalArgumentException("Andar ou numero invalido");
+        }else if(!(getApartamento(andar, numero).estaOcupado())){
+            System.out.println("O apartamento não está ocupado por nenhum Hóspede");
+            return false;
+        }else{
+            Consumo consumo = new Consumo(getApartamento(andar, numero), servicos.get(indiceServico), quantidade);
+            consumos.add(consumo);
+            return true;
         }
         if (indiceServico < 0 || indiceServico >= servicos.size()) {
             throw new IllegalArgumentException("Índice de serviço inválido");
