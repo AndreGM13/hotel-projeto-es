@@ -204,14 +204,28 @@ public class Hotel {
     }
 
     public void cadastrarServico(String nome, float preco) {
-        throw new UnsupportedOperationException("Implementar cadastrarServico");
+        if(preco <= 0){
+            throw new IllegalArgumentException("Preço inválido");
+        }else if(nome == ""){
+            throw new IllegalArgumentException("Nome inválido");
+        }else{
+            Servico servico = new Servico(nome, preco);
+            servicos.add(servico);
+        }
     }
 
     public boolean registrarConsumo(int andar, int numero, int indiceServico, int quantidade) {
         if (!aptoValido(andar, numero)) {
-            throw new IllegalArgumentException("Andar ou numero invalido");
+            System.out.println("Apartamento inválido");
+            return false;
+        }else if(!(getApartamento(andar, numero).estaOcupado())){
+            System.out.println("O apartamento não está ocupado por nenhum Hóspede");
+            return false;
+        }else{
+            Consumo consumo = new Consumo(getApartamento(andar, numero), servicos.get(indiceServico), quantidade);
+            consumos.add(consumo);
+            return true;
         }
-        throw new UnsupportedOperationException("Implementar registrarConsumo");
     }
 
     public ArrayList<Consumo> getConsumosDoApartamento(int andar, int numero) {
