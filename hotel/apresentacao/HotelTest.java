@@ -220,6 +220,7 @@ public class HotelTest {
         Hotel hotel = new Hotel();
         try{
             hotel.cadastrarServico("teste", 100);
+            hotel.cadastrarServico("teste2", 67);
             System.out.println(hotel.getServicos()); //para visualizar se o servico foi cadastrado
             passou++;
 
@@ -314,8 +315,7 @@ public class HotelTest {
             boolean totaisCorretos = fatura.getTotalDiarias() == 700
                     && fatura.getTotalConsumos() == 95
                     && fatura.getTotalGeral() == 795
-                    && hotel.getConsumosDoApartamento(1, 0).size() == 2
-                    && hotel.getConsumosDoApartamento(1, 1).isEmpty();
+                    && hotel.getConsumosDoApartamento(1, 0).size() == 2;
             hotel.registrarConsumo(1, 0, 0, 1);
             totaisCorretos = totaisCorretos && fatura.getTotalGeral() == 795;
             if (totaisCorretos) {

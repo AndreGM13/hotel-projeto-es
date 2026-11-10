@@ -261,8 +261,11 @@ public class Hotel {
         if (!aptoValido(andar, numero)) {
             throw new IllegalArgumentException("Andar ou numero invalido");
         }
-
+        
         Apartamento apartamento = matriz[andar][numero];
+        if(!apartamento.estaOcupado()){
+            throw new IllegalStateException("nao é possivel ver consumos de um apartamento não ocupado");
+        }
         ArrayList<Consumo> resultado = new ArrayList<>();
         for (Consumo consumo : consumos) {
             if (consumo.getApartamento().getHospede().getCpf() == apartamento.getHospede().getCpf()) { //nao é o ideal, porém para nao modificar o resto do codigo será feito assim
