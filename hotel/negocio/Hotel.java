@@ -204,28 +204,65 @@ public class Hotel {
     }
 
     public void cadastrarServico(String nome, float preco) {
-        throw new UnsupportedOperationException("Implementar cadastrarServico");
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome do serviço não pode ser vazio");
+        }
+        if (Float.isNaN(preco) || Float.isInfinite(preco) || preco <= 0) {
+            throw new IllegalArgumentException("Preço do serviço deve ser positivo");
+        }
+
+        servicos.add(new Servico(nome.trim(), preco));
     }
 
     public boolean registrarConsumo(int andar, int numero, int indiceServico, int quantidade) {
         if (!aptoValido(andar, numero)) {
             throw new IllegalArgumentException("Andar ou numero invalido");
         }
-        throw new UnsupportedOperationException("Implementar registrarConsumo");
+        if (indiceServico < 0 || indiceServico >= servicos.size()) {
+            throw new IllegalArgumentException("Índice de serviço inválido");
+        }
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("Quantidade deve ser positiva");
+        }
+
+        Apartamento apartamento = matriz[andar][numero];
+        if (!apartamento.estaOcupado()) {
+            return false;
+        }
+
+        consumos.add(new Consumo(apartamento, servicos.get(indiceServico), quantidade));
+        return true;
     }
 
     public ArrayList<Consumo> getConsumosDoApartamento(int andar, int numero) {
         if (!aptoValido(andar, numero)) {
             throw new IllegalArgumentException("Andar ou numero invalido");
         }
-        throw new UnsupportedOperationException("Implementar getConsumosDoApartamento");
+
+        Apartamento apartamento = matriz[andar][numero];
+        ArrayList<Consumo> resultado = new ArrayList<>();
+        for (Consumo consumo : consumos) {
+            if (consumo.getApartamento() == apartamento) {
+                resultado.add(consumo);
+            }
+        }
+        return resultado;
     }
 
     public Fatura emitirFatura(int andar, int numero, int dias) {
         if (!aptoValido(andar, numero)) {
             throw new IllegalArgumentException("Andar ou numero invalido");
         }
-        throw new UnsupportedOperationException("Implementar emitirFatura");
+        if (dias <= 0) {
+            throw new IllegalArgumentException("Quantidade de dias deve ser positiva");
+        }
+
+        Apartamento apartamento = matriz[andar][numero];
+        if (!apartamento.estaOcupado()) {
+            throw new IllegalStateException("Não é possível emitir fatura para apartamento não ocupado");
+        }
+
+        return new Fatura(apartamento, dias, getConsumosDoApartamento(andar, numero));
     }
 
     public Apartamento getApartamento(int andar, int numero) {

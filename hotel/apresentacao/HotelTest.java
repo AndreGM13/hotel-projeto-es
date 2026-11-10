@@ -298,6 +298,37 @@ public class HotelTest {
         }
     }
 
+    static void testarTotaisFatura(){
+        total++;
+        Hotel hotel = new Hotel();
+        Hospede hospede = new Hospede("123", "Ítalo", "puc", "123", "italo@pucsp.edu.br");
+        hotel.reservarApartamento(1, 0, hospede);
+        hotel.realizarCheckin(1, 0, hospede);
+        hotel.cadastrarServico("Café", 25);
+        hotel.cadastrarServico("Lavanderia", 10);
+        hotel.registrarConsumo(1, 0, 0, 3);
+        hotel.registrarConsumo(1, 0, 1, 2);
+
+        try {
+            Fatura fatura = hotel.emitirFatura(1, 0, 2);
+            boolean totaisCorretos = fatura.getTotalDiarias() == 700
+                    && fatura.getTotalConsumos() == 95
+                    && fatura.getTotalGeral() == 795
+                    && hotel.getConsumosDoApartamento(1, 0).size() == 2
+                    && hotel.getConsumosDoApartamento(1, 1).isEmpty();
+            hotel.registrarConsumo(1, 0, 0, 1);
+            totaisCorretos = totaisCorretos && fatura.getTotalGeral() == 795;
+            if (totaisCorretos) {
+                passou++;
+            } else {
+                System.out.println("Falha: testarTotaisFatura");
+            }
+        } catch (Exception e) {
+            System.out.println("Falha: testarTotaisFatura");
+            System.out.println(e);
+        }
+    }
+
     public static void main(String[] args) {
         testarReservarAptoLivre();
         testarReservarAptoOcupadoFalha();
@@ -323,6 +354,7 @@ public class HotelTest {
         testarConsumo();
         testarConsumoFalha();
         testarEmitirFatura();
+        testarTotaisFatura();
 
         System.out.println(passou + "/" + total + " testes passaram");
     }

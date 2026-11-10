@@ -1,5 +1,7 @@
 package hotel.modelo;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Fatura {
@@ -8,25 +10,41 @@ public class Fatura {
     private List<Consumo> consumos;
 
     public Fatura(Apartamento apto, int dias, List<Consumo> consumos) {
+        if (apto == null) {
+            throw new IllegalArgumentException("Apartamento não pode ser nulo");
+        }
+        if (dias <= 0) {
+            throw new IllegalArgumentException("Quantidade de dias deve ser positiva");
+        }
+        if (consumos == null) {
+            throw new IllegalArgumentException("Lista de consumos não pode ser nula");
+        }
+
         this.apartamento = apto;
         this.dias = dias;
-        this.consumos = consumos;
+        this.consumos = new ArrayList<>(consumos);
     }
 
     public float getTotalGeral() {
-        throw new UnsupportedOperationException("Implementar calculo da fatura");
+        return getTotalDiarias() + getTotalConsumos();
     }
 
     public Apartamento getApartamento() { return apartamento; }
     public int getDias() { return dias; }
-    public List<Consumo> getConsumos() { return consumos; }
+    public List<Consumo> getConsumos() {
+        return Collections.unmodifiableList(consumos);
+    }
 
     public float getTotalDiarias() {
-        throw new UnsupportedOperationException("Implementar calculo total de diarias");
+        return apartamento.getPrecoDiaria() * dias;
     }
 
     public float getTotalConsumos() {
-        throw new UnsupportedOperationException("Implementar calculo total de consumos");
+        float total = 0;
+        for (Consumo consumo : consumos) {
+            total += consumo.getTotal();
+        }
+        return total;
     }
 
     @Override
