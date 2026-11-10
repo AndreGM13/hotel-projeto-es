@@ -215,6 +215,89 @@ public class HotelTest {
         }
     }
 
+    static void testarCadastrarServico(){
+        total++;
+        Hotel hotel = new Hotel();
+        try{
+            hotel.cadastrarServico("teste", 100);
+            System.out.println(hotel.getServicos()); //para visualizar se o servico foi cadastrado
+            passou++;
+
+        }catch(Exception e){
+            System.out.println("Falha: testarCadastrarServico");
+            System.out.println(e);
+        }
+    }
+
+    static void testarCadastrarServicoFalha(){
+        total++;
+        Hotel hotel = new Hotel();
+        try {
+            //testar para preco <= 0, deve devolver exeption
+            hotel.cadastrarServico("teste", -1);
+            System.out.println("Falha: testarCadastrarServicoFalha");
+
+        } catch (UnsupportedOperationException e) {
+            System.out.println("Falha: testarCadastrarServicoFalha");
+            System.out.println(e);
+        } catch (Exception e){
+            passou++;
+        }
+    }
+
+    static void testarConsumo(){
+        total++;
+        Hotel hotel = new Hotel();
+        Hospede hospede =  new Hospede("123", "Ítalo", "puc", "123", "italo@pucsp.edu.br");
+        hotel.reservarApartamento(1, 4, hospede);
+        hotel.realizarCheckin(1, 4, hospede);
+        try{
+            hotel.cadastrarServico("teste", 100);
+            hotel.registrarConsumo(1,4, 0, 1);
+            //teste integrado para ver se o método getConsumosDoApartamento tambem funciona
+            System.out.println(hotel.getConsumosDoApartamento(1,4));
+            passou++;
+
+        }catch(Exception e){
+            System.out.println("Falha: testarConsumo");
+            System.out.println(e);
+        }
+    }
+
+    static void testarConsumoFalha(){
+        total++;
+        //teste para quarto nao ocupado
+        Hotel hotel = new Hotel();
+        try{
+            hotel.cadastrarServico("teste", 100);
+            if(!hotel.registrarConsumo(1,4, 0, 1)){
+                passou++;
+            }else{
+                System.out.println("Falha: testarConsumoFalha");
+            }
+        }catch(Exception e){
+            System.out.println("Falha: testarConsumoFalha");
+            System.out.println(e);
+        }
+
+    }
+    static void testarEmitirFatura(){
+        total++;
+        Hotel hotel = new Hotel();
+        Hospede hospede =  new Hospede("123", "Ítalo", "puc", "123", "italo@pucsp.edu.br");
+        
+        hotel.reservarApartamento(1, 4, hospede);
+        hotel.realizarCheckin(1, 4, hospede);
+
+        try {
+            System.out.println(hotel.emitirFatura(1, 4, 5));
+            passou++;
+        } catch (Exception e) {
+            System.out.println("Falha: testarEmitirFatura");
+            System.out.println(e);
+        }
+    }
+
     public static void main(String[] args) {
         testarReservarAptoLivre();
         testarReservarAptoOcupadoFalha();
@@ -235,6 +318,11 @@ public class HotelTest {
         System.out.println();
         testarCalcularTaxaOcupacao();
         testarCalcularTaxaReservas();
+        testarCadastrarServico();
+        testarCadastrarServicoFalha();
+        testarConsumo();
+        testarConsumoFalha();
+        testarEmitirFatura();
 
         System.out.println(passou + "/" + total + " testes passaram");
     }
