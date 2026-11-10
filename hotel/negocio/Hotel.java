@@ -158,6 +158,7 @@ public class Hotel {
 
         if(!matriz[andar][numero].estaLivre()) {
             Hospede h = matriz[andar][numero].getHospede();
+            System.out.println();
             if(matriz[andar][numero].estaOcupado())
                 System.out.println("Status: Ocupado");
             else
@@ -176,13 +177,13 @@ public class Hotel {
     * @return taxa de ocupação como um valor decimal entre 0.0(nenhum quarto ocupado) e 1.0(todos os quartos reservados)
     */
     public float calcularTaxaOcupacao() {
-        int i,j,contador=0;
-        float taxa;
+        int i,j;
+        float taxa,c = 0;
         for(i=0; i<=19; i++)
             for(j=0; j<14; j++)
                 if(matriz[i][j].estaOcupado())
-                    contador++;
-        taxa = (float) contador/280;
+                    c = c + 1;
+        taxa = c/280;
         return taxa;
     }
 
@@ -192,13 +193,13 @@ public class Hotel {
     * @return A taxa de reservas como um valor decimal entre 0.0(nenhum quarto reservado) e 1.0(todos os quartos reservados)
     */
     public float calcularTaxaReservas() {
-        int i,j,contador=0;
-        float taxa;
+        int i,j;
+        float taxa,c=0;
         for(i=0; i<=19; i++)
             for(j=0; j<14; j++)
                 if(matriz[i][j].estaReservado())
-                    contador++;
-        taxa = (float) contador/280;
+                    c = c + 1;
+        taxa = c/280;
         return taxa;
     }
 
