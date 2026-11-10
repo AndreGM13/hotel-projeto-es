@@ -265,7 +265,7 @@ public class Hotel {
         Apartamento apartamento = matriz[andar][numero];
         ArrayList<Consumo> resultado = new ArrayList<>();
         for (Consumo consumo : consumos) {
-            if (consumo.getApartamento().equals(apartamento)) {
+            if (consumo.getApartamento().getHospede().getCpf() == apartamento.getHospede().getCpf()) { //nao é o ideal, porém para nao modificar o resto do codigo será feito assim
                 resultado.add(consumo);
             }
         }
