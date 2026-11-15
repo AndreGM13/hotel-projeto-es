@@ -2,6 +2,10 @@ package hotel.apresentacao;
 
 import hotel.modelo.*;
 import hotel.negocio.Hotel;
+import hotel.servico.RelatorioSvc;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 public class HotelTest {
     private static int passou = 0;
     private static int total = 0;
@@ -299,6 +303,68 @@ public class HotelTest {
         }
     }
 
+    static void testarRankingServicos(){
+        total++;
+        Hotel hotel = new Hotel();
+        Hospede hospede = new Hospede("123", "Ítalo", "puc", "123", "italo@pucsp.edu.br");
+
+        try {
+            hotel.reservarApartamento(1, 4, hospede);
+            hotel.realizarCheckin(1, 4, hospede);
+            hotel.cadastrarServico("Café", 20);
+            hotel.cadastrarServico("Lavanderia", 35);
+            hotel.cadastrarServico("Massagem", 60);
+            hotel.registrarConsumo(1, 4, 0, 2);
+            hotel.registrarConsumo(1, 4, 2, 1);
+            hotel.registrarConsumo(1, 4, 1, 3);
+            
+            RelatorioSvc relatorio = new RelatorioSvc(hotel);
+            relatorio.gerarRankingServicos();
+            passou++;
+        } catch (Exception e) {
+            System.out.println("Falha: testarRankingServicos");
+            System.out.println(e);
+        }
+    }
+
+    static void testarRelatorioOcupacao(){
+        total++;
+        Hotel hotel = new Hotel();
+        Hospede hospede = new Hospede("123", "Ítalo", "puc", "123", "italo@pucsp.edu.br");
+
+        try {
+            hotel.reservarApartamento(1, 4, hospede);
+            hotel.realizarCheckin(1, 4, hospede);
+            hotel.emitirFatura(1, 4, 4);
+
+            RelatorioSvc relatorio = new RelatorioSvc(hotel);
+            relatorio.gerarRelatorioOcupacao();
+            passou++;
+        } catch (Exception e) {
+            System.out.println("Falha: testarRelatorioOcupacao");
+            System.out.println(e);
+        }
+    }
+
+    static void testarResumoFinanceiro(){
+        total++;
+        Hotel hotel = new Hotel();
+        Hospede hospede = new Hospede("123", "Ítalo", "puc", "123", "italo@pucsp.edu.br");
+
+        try {
+            hotel.reservarApartamento(1, 4, hospede);
+            hotel.realizarCheckin(1, 4, hospede);
+            hotel.emitirFatura(1, 4, 4);
+
+            RelatorioSvc relatorio = new RelatorioSvc(hotel);
+            relatorio.gerarResumoFinanceiro();
+            passou++;
+        } catch (Exception e) {
+            System.out.println("Falha: testarResumoFinanceiro");
+            System.out.println(e);
+        }
+    }
+
     static void testarTotaisFatura(){
         total++;
         Hotel hotel = new Hotel();
@@ -355,6 +421,12 @@ public class HotelTest {
         testarConsumoFalha();
         testarEmitirFatura();
         testarTotaisFatura();
+        System.out.println();
+        testarRelatorioOcupacao();
+        System.out.println();
+        testarResumoFinanceiro();
+        System.out.println();
+        testarRankingServicos();
 
         System.out.println(passou + "/" + total + " testes passaram");
     }
