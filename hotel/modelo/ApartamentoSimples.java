@@ -3,8 +3,8 @@ package hotel.modelo;
 public class ApartamentoSimples extends Apartamento {
     private static final float PRECO_DIARIA = 150.0f;
 
-    public ApartamentoSimples() {
-        super();
+    public ApartamentoSimples(int andar, int numero) {
+        super(andar, numero);
     }
 
     @Override

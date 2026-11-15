@@ -10,11 +10,13 @@ public class Hotel {
     private Apartamento[][] matriz;
     private ArrayList<Servico> servicos;
     private ArrayList<Consumo> consumos;
+    private ArrayList<Fatura> faturas;
 
     public Hotel() {
         this.matriz = new Apartamento[NUM_ANDARES][APTOS_POR_ANDAR];
         this.servicos = new ArrayList<>();
         this.consumos = new ArrayList<>();
+        this.faturas = new ArrayList<>();
         inicializar();
     }
 
@@ -22,9 +24,9 @@ public class Hotel {
         for (int a = 0; a < NUM_ANDARES; a++) {
             for (int n = 0; n < APTOS_POR_ANDAR; n++) { 
                 if(n<6)
-                    matriz[a][n] = new ApartamentoPremium();
+                    matriz[a][n] = new ApartamentoPremium(a,n);
                 else
-                    matriz[a][n] = new ApartamentoSimples();
+                    matriz[a][n] = new ApartamentoSimples(a,n);
             }
         }
     }
@@ -268,7 +270,7 @@ public class Hotel {
         }
         ArrayList<Consumo> resultado = new ArrayList<>();
         for (Consumo consumo : consumos) {
-            if (consumo.getApartamento().getHospede().getCpf() == apartamento.getHospede().getCpf()) { //nao é o ideal, porém para nao modificar o resto do codigo será feito assim
+            if ((consumo.getApartamento().getAndar() == andar)&&(consumo.getApartamento().getNumero() == numero)) { 
                 resultado.add(consumo);
             }
         }
@@ -298,7 +300,9 @@ public class Hotel {
             throw new IllegalStateException("Não é possível emitir fatura para apartamento não ocupado");
         }
 
-        return new Fatura(apartamento, dias, getConsumosDoApartamento(andar, numero));
+        Fatura fatura = new Fatura(apartamento, dias, getConsumosDoApartamento(andar, numero));
+        faturas.add(fatura);
+        return fatura;
     }
 
     public Apartamento getApartamento(int andar, int numero) {

@@ -3,10 +3,14 @@ package hotel.modelo;
 public class Apartamento {
     private Status status;
     private Hospede hospede;
+    private int andar;
+    private int numero;
 
-    public Apartamento() {
+    public Apartamento(int andar, int numero) {
         this.status = Status.LIVRE;
         this.hospede = null;
+        this.andar = andar;
+        this.numero = numero;
     }
 
     public Status getStatus() { return status; }
@@ -93,6 +97,8 @@ public class Apartamento {
     public boolean estaOcupado() { return status == Status.OCUPADO; }
 
     public float getPrecoDiaria() { return 0f; }
+    public int getAndar(){ return andar; }
+    public int getNumero(){ return numero; }
 
     public char getSymbol() {
         switch (status) {
