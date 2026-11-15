@@ -311,4 +311,5 @@ public class Hotel {
 
     public ArrayList<Servico> getServicos() { return servicos; }
     public ArrayList<Consumo> getConsumos() { return consumos; }
+    public ArrayList<Fatura> getFaturas() { return faturas; }
 }
