@@ -1,6 +1,10 @@
 package hotel.modelo;
 
-public class Consumo {
+import java.io.Serializable;
+
+public class Consumo implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Apartamento apartamento;
     private Servico servico;
     private int quantidade;

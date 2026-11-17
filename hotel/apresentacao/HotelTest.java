@@ -2,6 +2,10 @@ package hotel.apresentacao;
 
 import hotel.modelo.*;
 import hotel.negocio.Hotel;
+import hotel.repositorio.HotelRepo;
+import java.io.File;
+import java.nio.file.Files;
+
 public class HotelTest {
     private static int passou = 0;
     private static int total = 0;
@@ -329,6 +333,59 @@ public class HotelTest {
         }
     }
 
+    static void testarPersistencia(){
+        total++;
+        File arquivo = new File("hotel.dat");
+        boolean arquivoExistia = arquivo.exists();
+        byte[] dadosAnteriores = null;
+        boolean testeValido = false;
+
+        try {
+            if (arquivoExistia) {
+                dadosAnteriores = Files.readAllBytes(arquivo.toPath());
+            }
+
+            Hotel original = new Hotel();
+            Hospede hospede = new Hospede("456", "Maria", "Rua A", "9999", "maria@example.com");
+            original.reservarApartamento(2, 0, hospede);
+            original.realizarCheckin(2, 0, hospede);
+            original.cadastrarServico("Café", 25);
+            original.registrarConsumo(2, 0, 0, 2);
+
+            Hotel carregado;
+            HotelRepo.salvar(original);
+            carregado = HotelRepo.carregar();
+
+            boolean dadosPreservados = carregado.getApartamento(2, 0).estaOcupado()
+                    && "Maria".equals(carregado.getApartamento(2, 0).getHospede().getNome())
+                    && carregado.getServicos().size() == 1
+                    && carregado.getConsumosDoApartamento(2, 0).size() == 1
+                    && carregado.getConsumosDoApartamento(2, 0).get(0).getServico()
+                            == carregado.getServicos().get(0);
+            testeValido = dadosPreservados;
+        } catch (Exception e) {
+            System.out.println("Falha: testarPersistencia");
+            System.out.println(e);
+        } finally {
+            try {
+                if (arquivoExistia) {
+                    Files.write(arquivo.toPath(), dadosAnteriores);
+                } else {
+                    Files.deleteIfExists(arquivo.toPath());
+                }
+            } catch (Exception e) {
+                testeValido = false;
+                System.out.println("Falha ao restaurar arquivo de persistência: " + e);
+            }
+        }
+
+        if (testeValido) {
+            passou++;
+        } else {
+            System.out.println("Falha: testarPersistencia");
+        }
+    }
+
     public static void main(String[] args) {
         testarReservarAptoLivre();
         testarReservarAptoOcupadoFalha();
@@ -355,6 +412,7 @@ public class HotelTest {
         testarConsumoFalha();
         testarEmitirFatura();
         testarTotaisFatura();
+        testarPersistencia();
 
         System.out.println(passou + "/" + total + " testes passaram");
     }

@@ -2,8 +2,11 @@ package hotel.negocio;
 
 import hotel.modelo.*;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Hotel {
+public class Hotel implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public static final int NUM_ANDARES = 20;
     public static final int APTOS_POR_ANDAR = 14;
 
@@ -236,13 +239,6 @@ public class Hotel {
     public boolean registrarConsumo(int andar, int numero, int indiceServico, int quantidade) {
         if (!aptoValido(andar, numero)) {
             throw new IllegalArgumentException("Andar ou numero invalido");
-        }else if(!(getApartamento(andar, numero).estaOcupado())){
-            System.out.println("O apartamento não está ocupado por nenhum Hóspede");
-            return false;
-        }else{
-            Consumo consumo = new Consumo(getApartamento(andar, numero), servicos.get(indiceServico), quantidade);
-            consumos.add(consumo);
-            return true;
         }
         if (indiceServico < 0 || indiceServico >= servicos.size()) {
             throw new IllegalArgumentException("Índice de serviço inválido");

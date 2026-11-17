@@ -1,6 +1,10 @@
 package hotel.modelo;
 
-public class Apartamento {
+import java.io.Serializable;
+
+public class Apartamento implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Status status;
     private Hospede hospede;
 
